@@ -1,5 +1,6 @@
 ﻿using IRWalks.API.Data;
 using IRWalks.API.Models.Domain;
+using IRWalks.API.Models.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,20 +19,42 @@ namespace IRWalks.API.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var regions = _dbContext.Regions.ToList();
+            var regionsDomain = _dbContext.Regions.ToList();
+            var regionsDto = new List<RegionDto>();
 
-            return Ok(regions);
+            foreach(var regionDomain in regionsDomain)
+            {
+                regionsDto.Add(new RegionDto()
+                {
+                    Id = regionDomain.Id,
+                    Code = regionDomain.Code,
+                    Name = regionDomain.Name,
+                    RegionImageUrl = regionDomain.RegionImageUrl
+                });
+            }
+                 
+
+            return Ok(regionsDto);
             
         }
         [HttpGet("{id:Guid}")]
         public IActionResult GetById([FromRoute] Guid id)
         {
-            var region = _dbContext.Regions.FirstOrDefault(x=>x.Id==id);
-            if (region == null)
+
+            var regionDomain = _dbContext.Regions.FirstOrDefault(x=>x.Id==id);
+            if (regionDomain == null)
             {
                 return NotFound();
             }
-            return Ok(region);
+            var regionDto = new RegionDto
+            {
+                Id = regionDomain.Id,
+                Code = regionDomain.Code,
+                Name = regionDomain.Name,
+                RegionImageUrl = regionDomain.RegionImageUrl
+            };
+
+            return Ok(regionDto);
 
         }
     }
