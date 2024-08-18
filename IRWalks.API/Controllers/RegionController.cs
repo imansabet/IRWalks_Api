@@ -57,5 +57,29 @@ namespace IRWalks.API.Controllers
             return Ok(regionDto);
 
         }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] AddRegionRequestDto addRegionRequestDto )
+        {
+            var regionDomainModel = new Region
+            {
+                Code = addRegionRequestDto.Code,
+                Name = addRegionRequestDto.Name,
+                RegionImageUrl = addRegionRequestDto.RegionImageUrl
+            };
+            _dbContext.Regions.Add(regionDomainModel);
+            _dbContext.SaveChanges();
+
+
+            var regionDto = new RegionDto
+            {
+                Id = regionDomainModel.Id,
+                Code = regionDomainModel.Code,
+                RegionImageUrl = regionDomainModel.RegionImageUrl,
+                Name= regionDomainModel.Name
+            };
+
+            return CreatedAtAction(nameof(GetById),new { id = regionDto.Id } , regionDto);
+        }
     }
 }
