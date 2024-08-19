@@ -46,7 +46,7 @@ namespace IRWalks.API.Controllers
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
 
-            var regionDomain = await _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
+            var regionDomain = await regionRepository.GetAsync(id);
             if (regionDomain == null)
             {
                 return NotFound();
@@ -72,7 +72,7 @@ namespace IRWalks.API.Controllers
                 Name = addRegionRequestDto.Name,
                 RegionImageUrl = addRegionRequestDto.RegionImageUrl
             };
-            await _dbContext.Regions.AddAsync(regionDomainModel);
+             regionDomainModel =   await regionRepository.AddAsync(regionDomainModel);
             await _dbContext.SaveChangesAsync();
 
 
@@ -91,17 +91,20 @@ namespace IRWalks.API.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> Update([FromRoute] Guid id , [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
         {
-            var regionDomainModel = await  _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
+            var regionDomainModel = new Region
+            {
+                Code = updateRegionRequestDto.Code,
+                Name = updateRegionRequestDto.Name,
+                RegionImageUrl = updateRegionRequestDto.RegionImageUrl
+            };
+
+            regionDomainModel = await regionRepository.UpdateAsync(id, regionDomainModel);
+
             if (regionDomainModel == null)
             {
                 return NotFound();
             }
-            regionDomainModel.Name = updateRegionRequestDto.Name;
-            regionDomainModel.Code = updateRegionRequestDto.Code;
-            regionDomainModel.RegionImageUrl = updateRegionRequestDto.RegionImageUrl;
-
-            await _dbContext.SaveChangesAsync();
-
+           
             var regionDto = new RegionDto
             {
                 Id = regionDomainModel.Id,
@@ -120,13 +123,13 @@ namespace IRWalks.API.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-           var regionDomainModel = await  _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
+            var regionDomainModel = await regionRepository.DeleteAsync(id);
+
             if(regionDomainModel == null)
             {
                 return NotFound();
             }
-             _dbContext.Regions.Remove(regionDomainModel);
-            await _dbContext.SaveChangesAsync();
+             
 
             return Ok();
         }

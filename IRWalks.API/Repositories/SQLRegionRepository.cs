@@ -12,14 +12,23 @@ public class SQLRegionRepository : IRegionRepository
     {
         _dbContext = dbContext;
     }
-    public Task<Region> AddAsync(Region region)
+    public async Task<Region> AddAsync(Region region)
     {
-        throw new NotImplementedException();
+        await  _dbContext.Regions.AddAsync(region);
+        await _dbContext.SaveChangesAsync();
+        return region;
     }
 
-    public Task<Region> DeleteAsync(Guid id)
+    public async Task<Region?> DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var existingRegion = await _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
+        if(existingRegion == null)
+        {
+            return null;
+        }
+         _dbContext.Regions.Remove(existingRegion);
+        await _dbContext.SaveChangesAsync();
+        return existingRegion;
     }
 
     public async Task<IEnumerable<Region>> GetAllAsync()
@@ -27,13 +36,23 @@ public class SQLRegionRepository : IRegionRepository
         return await _dbContext.Regions.ToListAsync();
     }
 
-    public Task<Region> GetAsync(Guid id)
+    public async Task<Region?> GetAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public Task<Region> UpdateAsync(Guid id, Region region)
+    public async Task<Region?> UpdateAsync(Guid id, Region region)
     {
-        throw new NotImplementedException();
+        var existingRegion = await _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
+        if (existingRegion == null)
+        {
+            return null;
+        }
+        existingRegion.Code = region.Code;
+        existingRegion.Name = region.Name;
+        existingRegion.RegionImageUrl = region.RegionImageUrl;
+        
+        await _dbContext.SaveChangesAsync();
+        return existingRegion;
     }
 }
