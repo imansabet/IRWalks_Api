@@ -1,4 +1,5 @@
 ﻿using IRWalks.API.Data;
+using IRWalks.API.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,10 +12,15 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
 
+
+
 builder.Services.AddDbContext<IRWalksDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("IRWalks"));
 });
+
+builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
