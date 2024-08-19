@@ -22,7 +22,7 @@ namespace IRWalks.API.Controllers
             var regionsDomain = _dbContext.Regions.ToList();
             var regionsDto = new List<RegionDto>();
 
-            foreach(var regionDomain in regionsDomain)
+            foreach (var regionDomain in regionsDomain)
             {
                 regionsDto.Add(new RegionDto()
                 {
@@ -32,16 +32,17 @@ namespace IRWalks.API.Controllers
                     RegionImageUrl = regionDomain.RegionImageUrl
                 });
             }
-                 
+
 
             return Ok(regionsDto);
-            
+
         }
-        [HttpGet("{id:Guid}")]
+        [HttpGet]
+        [Route("{id:Guid}")]
         public IActionResult GetById([FromRoute] Guid id)
         {
 
-            var regionDomain = _dbContext.Regions.FirstOrDefault(x=>x.Id==id);
+            var regionDomain = _dbContext.Regions.FirstOrDefault(x => x.Id == id);
             if (regionDomain == null)
             {
                 return NotFound();
@@ -59,7 +60,7 @@ namespace IRWalks.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] AddRegionRequestDto addRegionRequestDto )
+        public IActionResult Create([FromBody] AddRegionRequestDto addRegionRequestDto)
         {
             var regionDomainModel = new Region
             {
@@ -76,10 +77,39 @@ namespace IRWalks.API.Controllers
                 Id = regionDomainModel.Id,
                 Code = regionDomainModel.Code,
                 RegionImageUrl = regionDomainModel.RegionImageUrl,
-                Name= regionDomainModel.Name
+                Name = regionDomainModel.Name
             };
 
-            return CreatedAtAction(nameof(GetById),new { id = regionDto.Id } , regionDto);
+            return CreatedAtAction(nameof(GetById), new { id = regionDto.Id }, regionDto);
         }
+
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public IActionResult Update([FromRoute] Guid id , [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
+        {
+            var regionDomainModel =  _dbContext.Regions.FirstOrDefault(x => x.Id == id);
+            if (regionDomainModel == null)
+            {
+                return NotFound();
+            }
+            regionDomainModel.Name = updateRegionRequestDto.Name;
+            regionDomainModel.Code = updateRegionRequestDto.Code;
+            regionDomainModel.RegionImageUrl = updateRegionRequestDto.RegionImageUrl;
+
+            _dbContext.SaveChanges();
+
+            var regionDto = new RegionDto
+            {
+                Id = regionDomainModel.Id,
+                Code = regionDomainModel.Code,
+                Name = regionDomainModel.Name,
+                RegionImageUrl = regionDomainModel.RegionImageUrl
+            };
+
+
+            return Ok(regionDto);
+
+        }
+
     }
 }
