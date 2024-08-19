@@ -48,7 +48,11 @@ public class SQLWalkRepository : IWalkRepository
         {
             return null;
         }
-        existingWalk.Code = Walk.Code;
+        existingWalk.RegionId = Walk.RegionId;
+        existingWalk.DifficultyId = Walk.DifficultyId;
+        existingWalk.LengthInKm = Walk.LengthInKm;
+        existingWalk.WalkImageUrl = Walk.WalkImageUrl;
+        existingWalk.Description = Walk.Description;
         existingWalk.Name = Walk.Name;
         existingWalk.WalkImageUrl = Walk.WalkImageUrl;
         
