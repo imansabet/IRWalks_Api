@@ -11,16 +11,14 @@ namespace IRWalks.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RegionController : ControllerBase
+    public class RegionsController : ControllerBase
     {
-        private readonly IRWalksDbContext _dbContext;
         private readonly IRegionRepository regionRepository;
         private readonly IMapper _mapper;
 
-        public RegionController(IRWalksDbContext dbContext , IRegionRepository regionRepository
+        public RegionsController( IRegionRepository regionRepository
             ,IMapper mapper)
         {
-            _dbContext = dbContext;
             this.regionRepository = regionRepository;
             _mapper = mapper;
         }
