@@ -1,4 +1,5 @@
 ﻿using IRWalks.API.Data;
+using IRWalks.API.Mappings;
 using IRWalks.API.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,8 @@ builder.Services.AddDbContext<IRWalksDbContext>(options =>
 });
 
 builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
+
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles)); 
 
 var app = builder.Build();
 
