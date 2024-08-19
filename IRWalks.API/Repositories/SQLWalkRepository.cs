@@ -33,7 +33,7 @@ public class SQLWalkRepository : IWalkRepository
 
     public async Task<IEnumerable<Walk>> GetAllAsync()
     {
-        return await _dbContext.Walks.ToListAsync();
+        return await _dbContext.Walks.Include("Region").Include("Difficulty").ToListAsync();
     }
 
     public async Task<Walk?> GetAsync(Guid id)
