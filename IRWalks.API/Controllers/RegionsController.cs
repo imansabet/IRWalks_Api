@@ -40,7 +40,7 @@ namespace IRWalks.API.Controllers
                 return NotFound();
             }
             
-            return Ok(_mapper.Map<List<RegionDto>>(regionDomain));
+            return Ok(_mapper.Map<RegionDto>(regionDomain));
 
         }
 

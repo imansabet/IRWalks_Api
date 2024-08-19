@@ -38,7 +38,7 @@ public class SQLWalkRepository : IWalkRepository
 
     public async Task<Walk?> GetAsync(Guid id)
     {
-        return await _dbContext.Walks.FirstOrDefaultAsync(x => x.Id == id);
+        return await _dbContext.Walks.Include("Region").Include("Difficulty").FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<Walk?> UpdateAsync(Guid id, Walk Walk)
