@@ -26,14 +26,14 @@ namespace IRWalks.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll
             ([FromQuery] string? filterOn , [FromQuery] string? filterQuery,
-             [FromQuery] string? sortBy, [FromQuery] bool? IsAscending  )
+             [FromQuery] string? sortBy, [FromQuery] bool? IsAscending ,
+            [FromQuery] int pageNumber = 1 , [FromQuery] int pageSize = 1000)
         {
-            var WalksDomain = await WalkRepository.GetAllAsync(filterOn, filterQuery , sortBy , IsAscending ?? true);            
+            var WalksDomain = await WalkRepository.GetAllAsync(filterOn, filterQuery , sortBy , IsAscending ?? true , pageNumber,pageSize);            
             return Ok(_mapper.Map<List<WalkDto>>(WalksDomain));
         }
 
-        [HttpGet]
-        [Route("{id:Guid}")]
+         [Route("{id:Guid}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
 
