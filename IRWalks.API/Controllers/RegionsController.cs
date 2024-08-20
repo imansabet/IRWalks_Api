@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using IRWalks.API.CustomeActionFilters;
 using IRWalks.API.Data;
 using IRWalks.API.Models.Domain;
 using IRWalks.API.Models.DTO;
@@ -45,12 +46,10 @@ namespace IRWalks.API.Controllers
         }
 
         [HttpPost]
+        [ValidateModel]
         public async Task<IActionResult> Create([FromBody] AddRegionRequestDto addRegionRequestDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            
             var regionDomainModel = _mapper.Map<Region>(addRegionRequestDto);
 
             regionDomainModel =   await regionRepository.AddAsync(regionDomainModel);
@@ -62,12 +61,11 @@ namespace IRWalks.API.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
+        [ValidateModel]
+
         public async Task<IActionResult> Update([FromRoute] Guid id , [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            
             var regionDomainModel = _mapper.Map<Region>(updateRegionRequestDto);
 
             regionDomainModel = await regionRepository.UpdateAsync(id, regionDomainModel);
