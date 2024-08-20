@@ -24,9 +24,11 @@ namespace IRWalks.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] string? filterOn , [FromQuery] string? filterQuery )
+        public async Task<IActionResult> GetAll
+            ([FromQuery] string? filterOn , [FromQuery] string? filterQuery,
+             [FromQuery] string? sortBy, [FromQuery] bool? IsAscending  )
         {
-            var WalksDomain = await WalkRepository.GetAllAsync(filterOn, filterQuery);            
+            var WalksDomain = await WalkRepository.GetAllAsync(filterOn, filterQuery , sortBy , IsAscending ?? true);            
             return Ok(_mapper.Map<List<WalkDto>>(WalksDomain));
         }
 

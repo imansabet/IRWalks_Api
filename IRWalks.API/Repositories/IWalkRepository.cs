@@ -5,7 +5,7 @@ namespace IRWalks.API.Repositories;
 
 public interface IWalkRepository
 {
-    Task<IEnumerable<Walk>> GetAllAsync(string? filterOn = null,string? filterQuery = null);
+    Task<IEnumerable<Walk>> GetAllAsync(string? filterOn = null,string? filterQuery = null , string? sortBy = null, bool IsAscending = true);
 
     Task<Walk?> GetAsync(Guid id);
 

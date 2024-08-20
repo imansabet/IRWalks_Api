@@ -1,6 +1,7 @@
 ﻿using IRWalks.API.Data;
 using IRWalks.API.Models.Domain;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace IRWalks.API.Repositories;
 
@@ -31,7 +32,7 @@ public class SQLWalkRepository : IWalkRepository
         return existingWalk;
     }
 
-    public async Task<IEnumerable<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null)
+    public async Task<IEnumerable<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool IsAscending = true)
     {
 
         var walks = _dbContext.Walks.Include("Region").Include("Difficulty").AsQueryable();
@@ -43,14 +44,26 @@ public class SQLWalkRepository : IWalkRepository
                 walks = walks.Where(x => x.Name.Contains(filterQuery));
             }
         }
+        if (string.IsNullOrWhiteSpace(sortBy) == false)
+        {
+            if (sortBy.Equals("Name", StringComparison.OrdinalIgnoreCase))
+            {
+                walks = IsAscending ?  walks.OrderBy(x => x.Name) : walks.OrderByDescending(x => x.Name) ;
+            }
+            else if(sortBy.Equals("Length", StringComparison.OrdinalIgnoreCase))
+            {
+                walks = IsAscending ? walks.OrderBy(x => x.LengthInKm) : walks.OrderByDescending(x => x.LengthInKm);
+
+            }
+        }
 
 
-        return await walks.ToListAsync();
+            return await walks.ToListAsync();
         
     //return await _dbContext.Walks.Include("Region").Include("Difficulty").ToListAsync();
     }
 
-
+    
 
     public async Task<Walk?> GetAsync(Guid id)
     {
