@@ -22,6 +22,10 @@ builder.Services.AddDbContext<IRWalksDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("IRWalks"));
 });
+builder.Services.AddDbContext<IRWalksAuthDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("IRWalksAuth"));
+});
 
 builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
 builder.Services.AddScoped<IWalkRepository, SQLWalkRepository>();
