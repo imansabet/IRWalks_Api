@@ -22,10 +22,11 @@ namespace IRWalks.API.Controllers
             this.WalkRepository = WalkRepository;
             _mapper = mapper;
         }
+
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string? filterOn , [FromQuery] string? filterQuery )
         {
-            var WalksDomain = await WalkRepository.GetAllAsync();            
+            var WalksDomain = await WalkRepository.GetAllAsync(filterOn, filterQuery);            
             return Ok(_mapper.Map<List<WalkDto>>(WalksDomain));
         }
 

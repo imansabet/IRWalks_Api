@@ -1,10 +1,11 @@
 ﻿using IRWalks.API.Models.Domain;
+using Microsoft.AspNetCore.Mvc;
 
 namespace IRWalks.API.Repositories;
 
 public interface IWalkRepository
 {
-    Task<IEnumerable<Walk>> GetAllAsync();
+    Task<IEnumerable<Walk>> GetAllAsync(string? filterOn = null,string? filterQuery = null);
 
     Task<Walk?> GetAsync(Guid id);
 

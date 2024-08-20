@@ -31,10 +31,26 @@ public class SQLWalkRepository : IWalkRepository
         return existingWalk;
     }
 
-    public async Task<IEnumerable<Walk>> GetAllAsync()
+    public async Task<IEnumerable<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null)
     {
-        return await _dbContext.Walks.Include("Region").Include("Difficulty").ToListAsync();
+
+        var walks = _dbContext.Walks.Include("Region").Include("Difficulty").AsQueryable();
+
+        if(string.IsNullOrWhiteSpace(filterOn) == false && string.IsNullOrWhiteSpace(filterQuery) == false)
+        {
+            if (filterOn.Equals("Name", StringComparison.OrdinalIgnoreCase))
+            {
+                walks = walks.Where(x => x.Name.Contains(filterQuery));
+            }
+        }
+
+
+        return await walks.ToListAsync();
+        
+    //return await _dbContext.Walks.Include("Region").Include("Difficulty").ToListAsync();
     }
+
+
 
     public async Task<Walk?> GetAsync(Guid id)
     {

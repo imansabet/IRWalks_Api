@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IRWalks.API.Migrations
 {
     [DbContext(typeof(IRWalksDbContext))]
-    [Migration("20240817160806_InitialMigration")]
+    [Migration("20240820155533_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -38,6 +38,23 @@ namespace IRWalks.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Difficulty");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("98a39a48-78fa-41d7-ad97-445ccb84177c"),
+                            Name = "Easy"
+                        },
+                        new
+                        {
+                            Id = new Guid("d817f8e9-5b09-4181-b064-8069b4b8fa61"),
+                            Name = "Medium"
+                        },
+                        new
+                        {
+                            Id = new Guid("95ad1fcd-7876-4b09-be77-859c9e94a9b3"),
+                            Name = "Hard"
+                        });
                 });
 
             modelBuilder.Entity("IRWalks.API.Models.Domain.Region", b =>
@@ -60,6 +77,36 @@ namespace IRWalks.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Regions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("75a93ca7-7b5c-4038-b0c0-140952f70e4f"),
+                            Code = "FRS",
+                            Name = "Fars",
+                            RegionImageUrl = "region.jpg"
+                        },
+                        new
+                        {
+                            Id = new Guid("0a2c8388-f3cc-4328-9b3e-6f47b92c4a11"),
+                            Code = "TBZ",
+                            Name = "Tabriz",
+                            RegionImageUrl = "region.jpg"
+                        },
+                        new
+                        {
+                            Id = new Guid("10191792-8707-4768-9e95-7aa628328853"),
+                            Code = "TEH",
+                            Name = "Tehran",
+                            RegionImageUrl = "region.jpg"
+                        },
+                        new
+                        {
+                            Id = new Guid("5d860541-eb55-4aa7-9fd5-1c525f617788"),
+                            Code = "SEM",
+                            Name = "Semnan",
+                            RegionImageUrl = "region.jpg"
+                        });
                 });
 
             modelBuilder.Entity("IRWalks.API.Models.Domain.Walk", b =>
