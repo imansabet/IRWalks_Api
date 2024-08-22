@@ -1,4 +1,6 @@
-﻿using IRWalks.API.Models.DTO;
+﻿using Azure;
+using IRWalks.API.Models.DTO;
+using IRWalks.API.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +12,12 @@ namespace IRWalks.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ITokenRepository _tokenRepository;
 
-        public AuthController(UserManager<IdentityUser> userManager)
+        public AuthController(UserManager<IdentityUser> userManager , ITokenRepository tokenRepository)
         {
             _userManager = userManager;
+            _tokenRepository = tokenRepository;
         }
         [HttpPost]
         [Route("Register")]
@@ -53,7 +57,16 @@ namespace IRWalks.API.Controllers
                 if (checkPasswordResult)
                 {
 
-                    return Ok();
+                    var roles = await _userManager.GetRolesAsync(user);
+                    if(roles != null)
+                    {
+                        var jwtToken =  _tokenRepository.CreateJWTToken(user, roles.ToList());
+                        var response = new LoginResponseDto
+                        {
+                            JwtToken = jwtToken
+                        };
+                        return Ok(response);
+                    }
                 }  
             }
             return BadRequest("Username or password incorrect");

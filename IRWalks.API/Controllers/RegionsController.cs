@@ -4,6 +4,7 @@ using IRWalks.API.Data;
 using IRWalks.API.Models.Domain;
 using IRWalks.API.Models.DTO;
 using IRWalks.API.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace IRWalks.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class RegionsController : ControllerBase
     {
         private readonly IRegionRepository regionRepository;

@@ -30,6 +30,8 @@ builder.Services.AddDbContext<IRWalksAuthDbContext>(options =>
 
 builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
 builder.Services.AddScoped<IWalkRepository, SQLWalkRepository>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
