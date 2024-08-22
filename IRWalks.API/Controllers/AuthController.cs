@@ -52,6 +52,7 @@ namespace IRWalks.API.Controllers
                 var checkPasswordResult = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
                 if (checkPasswordResult)
                 {
+
                     return Ok();
                 }  
             }
