@@ -1,4 +1,6 @@
-﻿using IRWalks.API.Models.DTO;
+﻿using IRWalks.API.Models.Domain;
+using IRWalks.API.Models.DTO;
+using IRWalks.API.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +10,12 @@ namespace IRWalks.API.Controllers
     [ApiController]
     public class ImagesController : ControllerBase
     {
+        private readonly IImageRepository imageRepository;
+
+        public ImagesController(IImageRepository imageRepository)
+        {
+            this.imageRepository = imageRepository;
+        }
         [HttpPost]
         [Route("Upload")]
         public async Task<IActionResult> Upload([FromForm] ImageUploadRequestDto request)
@@ -15,7 +23,16 @@ namespace IRWalks.API.Controllers
             ValidateFileUpload(request);
             if (ModelState.IsValid)
             {
-
+                var imageDomainModel = new Image
+                {
+                    File = request.File,
+                    FileExtension = Path.GetExtension(request.File.FileName),
+                    FileSizeInBytes = request.File.Length,
+                    FileName = request.FileName,
+                    FileDescription = request.FileDescription,
+                };
+                await imageRepository.Upload(imageDomainModel);
+                return Ok(imageDomainModel);
             }
             return BadRequest(ModelState);
 
